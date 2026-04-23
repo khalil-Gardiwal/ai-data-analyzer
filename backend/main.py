@@ -4,14 +4,11 @@ import pandas as pd
 
 app = FastAPI()
 
-# ✅ Allow both local dev + Netlify frontend
+# Temporary debug CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://ai-data-analyzer.netlify.app"
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -20,25 +17,14 @@ app.add_middleware(
 def read_root():
     return {"message": "AI Data Analyzer is running 🚀"}
 
-
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
-    # Read CSV file
     df = pd.read_csv(file.file)
 
-    # Basic info
     rows, cols = df.shape
-
-    # Data types
     dtypes = {col: str(dtype) for col, dtype in df.dtypes.items()}
-
-    # Missing values
     missing_values = df.isnull().sum().to_dict()
-
-    # Preview first 5 rows
     preview = df.head(5).fillna("").to_dict(orient="records")
-
-    # Summary statistics for numeric columns
     numeric_summary = df.describe().fillna("").to_dict()
 
     return {
