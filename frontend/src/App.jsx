@@ -33,7 +33,7 @@ function App() {
       setLoading(true);
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/upload",
+        "https://ai-data-analyzer-api-nfbk.onrender.com/upload",
         formData,
         {
           headers: {
