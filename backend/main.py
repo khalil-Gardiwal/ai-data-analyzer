@@ -4,9 +4,13 @@ import pandas as pd
 
 app = FastAPI()
 
+# ✅ Allow both local dev + Netlify frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://ai-data-analyzer.netlify.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
